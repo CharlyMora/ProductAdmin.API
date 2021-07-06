@@ -13,7 +13,7 @@ namespace ProductAdmin.API.Entities
 
         [Required]
         [MaxLength(60)]
-        public string Title { get; set; }
+        public string ShortName { get; set; }
 
         [Required]
         [MaxLength(1500)]
