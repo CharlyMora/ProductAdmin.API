@@ -11,13 +11,13 @@ namespace ProductAdmin.API.DbContexts
     {
         public ProductsAdminContext(DbContextOptions<ProductsAdminContext> options) : base(options) { }
 
-        public DbSet<Product> Product { get; set; }
+        public DbSet<Product> Products { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Product>().HasData(
                 new Product() { 
-                    Id= new Guid(),
+                    Id= Guid.NewGuid(),
                     ShortName = "apartamento en barrio alqueria",
                     Description = "apartamento con gran amplitud apesar de dimensiones teccnicas, paredes blancas y vista a las montañas",
                     ProductType = ProductType.Apartamentos,
@@ -27,7 +27,7 @@ namespace ProductAdmin.API.DbContexts
                 },
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     ShortName = "Casa en alqueria la fragua",
                     Description = "Gran lote con casa casi lista para ser demolida y reconstruida",
                     ProductType = ProductType.Terrenos,
@@ -37,7 +37,7 @@ namespace ProductAdmin.API.DbContexts
                 },
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     ShortName = "Muebles para casa",
                     Description = "Muebles de casa recien demolida listos para encontrar un nuevo hogar",
                     ProductType = ProductType.Bienes,
@@ -47,7 +47,7 @@ namespace ProductAdmin.API.DbContexts
                 },
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     ShortName = "Renault 6 clasico",
                     Description = "Primer renault 6 de colombia con placas clasicas, naturalemnte en perfecto estado",
                     ProductType = ProductType.Vehículos,
@@ -57,7 +57,7 @@ namespace ProductAdmin.API.DbContexts
                 },
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     ShortName = "Apartamento calle 13 con boyaca",
                     Description = "Linto apartamento solo habitado por una pareja de hermanos, grande y queda cerca a dos centros comerciales, el eden y multiplaza",
                     ProductType = ProductType.Apartamentos,
@@ -67,7 +67,7 @@ namespace ProductAdmin.API.DbContexts
                 },
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     ShortName = "Finca lechera",
                     Description = "Fina a las afuera de bogota por el norte, solia estar dedicada a la industria lechera, gangazo",
                     ProductType = ProductType.Terrenos,
@@ -77,7 +77,7 @@ namespace ProductAdmin.API.DbContexts
                 },
                 new Product()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     ShortName = "Camioneta gran vitara",
                     Description = "Hermosa camioneta gran vitara modelo 20 color rojo, la vendemos por que nos vamos del pais, oferta imperdible",
                     ProductType = ProductType.Vehículos,

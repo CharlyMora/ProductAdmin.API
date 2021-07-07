@@ -1,10 +1,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using ProductAdmin.API.DbContexts;
+using ProductAdmin.API.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +28,11 @@ namespace ProductAdmin.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddScoped<IProductsAdminRepository, ProductsAdminRepository>();
+            services.AddDbContext<ProductsAdminContext>(options =>
+            {
+                options.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=CourselibraryDB;Trusted_Connection=True;");  
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
