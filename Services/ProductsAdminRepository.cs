@@ -65,6 +65,17 @@ namespace ProductAdmin.API.Services
             }
         }
 
+        public IEnumerable<Product> GetProducts(string searchParameters)
+        {
+            if (String.IsNullOrWhiteSpace(searchParameters))
+            {
+                return _context.Products.ToList();
+            }
+            searchParameters = searchParameters.Trim();
+
+            return _context.Products.Where(x => x.Description.Contains(searchParameters)).ToList();
+        }
+
         public void UpdateProduct(Product product) {
             _context.Products.Update(product);
             //_context.SaveChanges();

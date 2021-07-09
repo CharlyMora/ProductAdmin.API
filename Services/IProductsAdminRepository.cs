@@ -15,6 +15,7 @@ namespace ProductAdmin.API.Services
         void UpdateProduct(Product product);
         void DeleteProduct(Product product);
         bool ProductExists(Guid productId);
+        IEnumerable<Product> GetProducts(string searchParameters);
         bool Save();
     }
 }
