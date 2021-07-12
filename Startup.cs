@@ -33,6 +33,8 @@ namespace ProductAdmin.API
                 //setupAction.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
             }).AddXmlDataContractSerializerFormatters();
 
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             services.AddScoped<IProductsAdminRepository, ProductsAdminRepository>();
             services.AddDbContext<ProductsAdminContext>(options =>
             {

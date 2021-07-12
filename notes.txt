@@ -1,0 +1,5 @@
+﻿
+
+
++Remover value y buy date de los datos obtenidos
++cambiar product type y product status por sus valores en texto

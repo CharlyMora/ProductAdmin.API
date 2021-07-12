@@ -7,6 +7,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using ProductAdmin.API.Entities;
+using ProductAdmin.API.Models;
+using AutoMapper;
 
 namespace ProductAdmin.API.Controllers
 {
@@ -14,12 +16,16 @@ namespace ProductAdmin.API.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private IProductsAdminRepository _producsAdminRepository;
+        private readonly IProductsAdminRepository _producsAdminRepository;
+        private readonly IMapper _mapper;
 
-        public ProductsController(IProductsAdminRepository producsAdminRepository)
+        public ProductsController(IProductsAdminRepository producsAdminRepository,
+                                  IMapper mapper)
         {
             _producsAdminRepository = producsAdminRepository ??
                 throw new ArgumentNullException(nameof(producsAdminRepository));
+            _mapper = mapper ??
+                throw new ArgumentNullException(nameof(mapper));
         }
 
         //[HttpGet()]
@@ -33,22 +39,22 @@ namespace ProductAdmin.API.Controllers
 
         [HttpGet()]
         //public ActionResult<IEnumerable<Product>> GetProducts([FromQuery(Name ="in case of variable name != from key in query string this is from query to key ")] ProductsResourceParameters productsResourceParameters)
-        public ActionResult<IEnumerable<Product>> GetProducts(string search)
+        public ActionResult<IEnumerable<ProductDto>> GetProducts(string search)
         {
             var productsFromRepo = _producsAdminRepository.GetProducts(search);
 
-            return Ok(productsFromRepo);
+            return Ok(_mapper.Map<IEnumerable<ProductDto>>(productsFromRepo));
         }
 
 
         [HttpGet("{productId:guid}")]
-        public IActionResult GetProduct(Guid productId)
+        public ActionResult<ProductDto> GetProduct(Guid productId)
         {
             var productsFromRepo = _producsAdminRepository.GetProduct(productId);
 
             if (productsFromRepo == null) return NotFound();
 
-            return Ok(productsFromRepo);
+            return Ok(_mapper.Map<ProductDto>(productsFromRepo));
         }
     }
 }
