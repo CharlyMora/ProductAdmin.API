@@ -38,6 +38,7 @@ namespace ProductAdmin.API.Controllers
         //}
 
         [HttpGet()]
+        [HttpHead]
         //public ActionResult<IEnumerable<Product>> GetProducts([FromQuery(Name ="in case of variable name != from key in query string this is from query to key ")] ProductsResourceParameters productsResourceParameters)
         public ActionResult<IEnumerable<ProductDto>> GetProducts(string search)
         {
@@ -45,7 +46,6 @@ namespace ProductAdmin.API.Controllers
 
             return Ok(_mapper.Map<IEnumerable<ProductDto>>(productsFromRepo));
         }
-
 
         [HttpGet("{productId:guid}")]
         public ActionResult<ProductDto> GetProduct(Guid productId)
@@ -55,6 +55,35 @@ namespace ProductAdmin.API.Controllers
             if (productsFromRepo == null) return NotFound();
 
             return Ok(_mapper.Map<ProductDto>(productsFromRepo));
+        }
+        [HttpPost]
+        public ActionResult<ProductDto> CreateProduct(Guid productId)
+        {
+            var productsFromRepo = _producsAdminRepository.GetProduct(productId);
+
+            if (productsFromRepo == null) return NotFound();
+
+            return Ok(_mapper.Map<ProductDto>(productsFromRepo));
+        }
+
+        //to be removed, needs to be improved
+        [HttpGet("full")]
+        public ActionResult<IEnumerable<ProductFullDto>> GetFullProducts(string search)
+        {
+            var productsFromRepo = _producsAdminRepository.GetProducts(search);
+
+            return Ok(_mapper.Map<IEnumerable<ProductFullDto>>(productsFromRepo));
+        }
+
+        //to be removed, needs to be improved
+        [HttpGet("full/{productId:guid}")]
+        public ActionResult<ProductFullDto> GetFullProduct(Guid productId)
+        {
+            var productsFromRepo = _producsAdminRepository.GetProduct(productId);
+
+            if (productsFromRepo == null) return NotFound();
+
+            return Ok(_mapper.Map<ProductFullDto>(productsFromRepo));
         }
     }
 }
