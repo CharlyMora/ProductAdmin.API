@@ -20,6 +20,25 @@ namespace ProductAdmin.API.Profiles
                     dest => dest.ProductType,
                     opt => opt.MapFrom(src => Enum.GetName(typeof(ProductType), src.ProductType))
                     );
+
+            CreateMap<Entities.Product, Models.ProductFullDto>()
+                .ForMember(
+                    dest => dest.ProductStatus,
+                    opt => opt.MapFrom(src => Enum.GetName(typeof(ProductStatus), src.ProductStatus))
+                    )
+                .ForMember(
+                    dest => dest.ProductType,
+                    opt => opt.MapFrom(src => Enum.GetName(typeof(ProductType), src.ProductType))
+                    );
+
+            CreateMap<Models.ProductForCreation, Entities.Product>()
+                .ForMember(
+                    dest => dest.ProductStatus,
+                    opt => opt.MapFrom(src=> Enum.Parse(typeof(ProductStatus), src.ProductStatus)))
+                .ForMember(
+                    dest => dest.ProductType,
+                    opt => opt.MapFrom(src => Enum.Parse(typeof(ProductType), src.ProductType))
+                    );
         }
     }
 }

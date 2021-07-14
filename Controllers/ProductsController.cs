@@ -47,7 +47,7 @@ namespace ProductAdmin.API.Controllers
             return Ok(_mapper.Map<IEnumerable<ProductDto>>(productsFromRepo));
         }
 
-        [HttpGet("{productId:guid}")]
+        [HttpGet("{productId:guid}", Name = "GetProduct")]
         public ActionResult<ProductDto> GetProduct(Guid productId)
         {
             var productsFromRepo = _producsAdminRepository.GetProduct(productId);
@@ -57,13 +57,27 @@ namespace ProductAdmin.API.Controllers
             return Ok(_mapper.Map<ProductDto>(productsFromRepo));
         }
         [HttpPost]
-        public ActionResult<ProductDto> CreateProduct(Guid productId)
+        public ActionResult<ProductDto> CreateProduct(ProductForCreation product)
         {
-            var productsFromRepo = _producsAdminRepository.GetProduct(productId);
+            try
+            {
+                var productEntity = _mapper.Map<Entities.Product>(product);
+                _producsAdminRepository.AddProduct(productEntity);
+                _producsAdminRepository.Save();
+                var productToReturn = _mapper.Map<ProductDto>(productEntity);
 
-            if (productsFromRepo == null) return NotFound();
+                return CreatedAtRoute("GetProduct", new { productId = productToReturn.Id }, productToReturn);
+            }
+            catch(Exception ex)
+            {
+                
+                Console.WriteLine(ex.InnerException.Message);
+                Console.WriteLine(ex.GetType());
 
-            return Ok(_mapper.Map<ProductDto>(productsFromRepo));
+                return BadRequest(ex.InnerException.Message);
+            }
+            
+            
         }
 
         //to be removed, needs to be improved
