@@ -31,7 +31,8 @@ namespace ProductAdmin.API
             services.AddControllers(setupAction => {
                 setupAction.ReturnHttpNotAcceptable = true;
                 //setupAction.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
-            }).AddXmlDataContractSerializerFormatters();
+            }).AddXmlDataContractSerializerFormatters()
+            ;
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

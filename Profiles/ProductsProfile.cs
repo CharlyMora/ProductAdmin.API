@@ -14,7 +14,7 @@ namespace ProductAdmin.API.Profiles
             CreateMap<Entities.Product, Models.ProductDto>()
                 .ForMember(
                     dest => dest.ProductStatus,
-                    opt => opt.MapFrom(src => Enum.GetName(typeof(ProductStatus),src.ProductStatus))
+                    opt => opt.MapFrom(src => Enum.GetName(typeof(ProductStatus), src.ProductStatus))
                     )
                 .ForMember(
                     dest => dest.ProductType,
@@ -31,14 +31,24 @@ namespace ProductAdmin.API.Profiles
                     opt => opt.MapFrom(src => Enum.GetName(typeof(ProductType), src.ProductType))
                     );
 
-            CreateMap<Models.ProductForCreation, Entities.Product>()
+            CreateMap<Models.ProductForCreationDto, Entities.Product>()
                 .ForMember(
                     dest => dest.ProductStatus,
-                    opt => opt.MapFrom(src=> Enum.Parse(typeof(ProductStatus), src.ProductStatus)))
+                    opt => opt.MapFrom(src => Enum.Parse(typeof(ProductStatus), src.ProductStatus)))
                 .ForMember(
                     dest => dest.ProductType,
                     opt => opt.MapFrom(src => Enum.Parse(typeof(ProductType), src.ProductType))
                     );
+
+            CreateMap<Models.ProductForUpdateDto, Entities.Product>()
+                .ForMember(
+                    dest => dest.ProductStatus,
+                    opt => opt.MapFrom(src => Enum.Parse(typeof(ProductStatus), src.ProductStatus)));
+
+            CreateMap<Entities.Product, Models.ProductForUpdateDto>()
+                .ForMember(
+                    dest => dest.ProductStatus,
+                    opt => opt.MapFrom(src => Enum.GetName(typeof(ProductStatus), src.ProductStatus)));
         }
     }
 }

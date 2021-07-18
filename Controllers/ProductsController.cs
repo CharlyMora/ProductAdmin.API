@@ -5,10 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using ProductAdmin.API.Entities;
 using ProductAdmin.API.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace ProductAdmin.API.Controllers
 {
@@ -57,24 +57,45 @@ namespace ProductAdmin.API.Controllers
             return Ok(_mapper.Map<ProductDto>(productsFromRepo));
         }
         [HttpPost]
-        public ActionResult<ProductDto> CreateProduct(ProductForCreation product)
+        public ActionResult<ProductDto> CreateProduct(ProductForCreationDto product)
         {
+
+            if (product.BuyDate.Ticks == 0)
+            {
+                return BadRequest("Buydate is needed");
+            }
+
+            if (product.Value == 0)
+            {
+                return BadRequest("Value is needed");
+            }
+
             try
             {
-                var productEntity = _mapper.Map<Entities.Product>(product);
-                _producsAdminRepository.AddProduct(productEntity);
-                _producsAdminRepository.Save();
-                var productToReturn = _mapper.Map<ProductDto>(productEntity);
 
-                return CreatedAtRoute("GetProduct", new { productId = productToReturn.Id }, productToReturn);
+                    var productEntity = _mapper.Map<Entities.Product>(product);
+                    _producsAdminRepository.AddProduct(productEntity);
+                    _producsAdminRepository.Save();
+                    var productToReturn = _mapper.Map<ProductDto>(productEntity);
+
+                    return CreatedAtRoute("GetProduct", new { productId = productToReturn.Id }, productToReturn);
+          
             }
-            catch(Exception ex)
+            catch (AutoMapperConfigurationException ex)
             {
-                
-                Console.WriteLine(ex.InnerException.Message);
+
+                Console.WriteLine(ex.InnerException?.Message);
                 Console.WriteLine(ex.GetType());
 
-                return BadRequest(ex.InnerException.Message);
+                return BadRequest(ex.InnerException?.Message);
+            }
+            catch (Exception ex)
+            {
+                
+                Console.WriteLine(ex.InnerException?.Message);
+                Console.WriteLine(ex.GetType());
+
+                return BadRequest(ex.InnerException?.Message);
             }
             
             
@@ -99,5 +120,77 @@ namespace ProductAdmin.API.Controllers
 
             return Ok(_mapper.Map<ProductFullDto>(productsFromRepo));
         }
+
+        [HttpPut("{productId:guid}")]
+        public ActionResult UpdateProduct(Guid productId, ProductForUpdateDto product) {
+
+            if(product.BuyDate.Ticks == 0)
+            {
+                return BadRequest("Buydate is needed");
+            }
+
+            if (product.Value == 0)
+            {
+                return BadRequest("Value is needed");
+            }
+
+            //implement in other gets?
+            if (!_producsAdminRepository.ProductExists(productId))
+            {
+                return NotFound();
+            }
+
+            var productFormRepo = _producsAdminRepository.GetProduct(productId);
+
+            if (productFormRepo == null) return NotFound();
+
+            // map the entity to a ProductForUpdateDto
+            // apply the updated field values to that dto
+            // map the ProductForUpdateDto back to an entity
+
+            _mapper.Map(product, productFormRepo);
+
+            _producsAdminRepository.UpdateProduct(productFormRepo);
+            _producsAdminRepository.Save();
+
+            return Ok("Updated product with id: "+productId);
+        }
+
+        //[HttpPatch("{productId:guid}")]
+        //public ActionResult PartialUpdateProduct(Guid productId, JsonPatchDocument<ProductForUpdateDto> patchDocument)
+        //{
+
+        //    if (!_producsAdminRepository.ProductExists(productId))
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var productFormRepo = _producsAdminRepository.GetProduct(productId);
+
+        //    if (productFormRepo == null) return NotFound();
+
+        //    var productToPatch = _mapper.Map<ProductForUpdateDto>(productFormRepo);
+
+        //    try
+        //    {
+        //        patchDocument.ApplyTo(productToPatch);
+        //    }
+        //    catch (Exception)
+        //    {
+
+        //        return BadRequest("something went wrong with the information provided to patch");
+        //    }
+
+            
+
+        //    _mapper.Map(productToPatch, productFormRepo);
+
+        //    _producsAdminRepository.UpdateProduct(productFormRepo);
+        //    _producsAdminRepository.Save();
+
+        //    //return Ok("Updated product with id: " + productId);
+
+        //    return NoContent();
+        //}
     }
 }

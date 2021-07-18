@@ -23,11 +23,12 @@ namespace ProductAdmin.API.Entities
         public ProductType ProductType { get; set; }
 
         [Required]
+        public ProductStatus ProductStatus { get; set; }
+
+        [Required]
         public long Value { get; set; }
 
         public DateTime BuyDate { get; set; }
 
-        [Required]
-        public ProductStatus ProductStatus { get; set; }
     }
 }
