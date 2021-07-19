@@ -28,21 +28,13 @@ namespace ProductAdmin.API.Controllers
                 throw new ArgumentNullException(nameof(mapper));
         }
 
-        //[HttpGet()]
-        //public IActionResult GetProducts()
-        //{
-        //    var productsFromRepo = _producsAdminRepository.GetProducts();
-        //    // siempre va a retornar json aun cuando se le pida otro tipo de archivo
-        //    // por ende siempre va a decir 200 ok
-        //    return new JsonResult(productsFromRepo);
-        //}
-
         [HttpGet()]
         [HttpHead]
-        //public ActionResult<IEnumerable<Product>> GetProducts([FromQuery(Name ="in case of variable name != from key in query string this is from query to key ")] ProductsResourceParameters productsResourceParameters)
         public ActionResult<IEnumerable<ProductDto>> GetProducts(string search)
         {
             var productsFromRepo = _producsAdminRepository.GetProducts(search);
+
+            if (productsFromRepo.Count() < 1) return NoContent();
 
             return Ok(_mapper.Map<IEnumerable<ProductDto>>(productsFromRepo));
         }
@@ -52,7 +44,7 @@ namespace ProductAdmin.API.Controllers
         {
             var productsFromRepo = _producsAdminRepository.GetProduct(productId);
 
-            if (productsFromRepo == null) return NotFound();
+            if (productsFromRepo == null) return NoContent();
 
             return Ok(_mapper.Map<ProductDto>(productsFromRepo));
         }

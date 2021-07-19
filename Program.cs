@@ -24,7 +24,7 @@ namespace ProductAdmin.API
                     var contex = scope.ServiceProvider.GetService<ProductsAdminContext>();
 
                     //for demo purposes
-                    contex.Database.EnsureDeleted();
+                    //contex.Database.EnsureDeleted();
                     contex.Database.Migrate();
                     Console.WriteLine("CORRECTLY MIGRATED");
                 }
