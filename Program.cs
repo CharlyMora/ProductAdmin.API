@@ -32,7 +32,7 @@ namespace ProductAdmin.API
                 {
                     var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
                     logger.LogError(ex, "An error ocurred while migrating the database");
-                    Console.WriteLine("ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ");
+                    Console.WriteLine("ERROR DURING MIGRATION ");
                 }
             }
 

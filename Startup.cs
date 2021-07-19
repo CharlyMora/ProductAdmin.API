@@ -37,9 +37,13 @@ namespace ProductAdmin.API
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddScoped<IProductsAdminRepository, ProductsAdminRepository>();
+
+            string connString = ConfigurationExtensions.GetConnectionString(this.Configuration, "LocalHostConnection");
             services.AddDbContext<ProductsAdminContext>(options =>
             {
-                options.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=CourselibraryDB;Trusted_Connection=True;");  
+                options.UseSqlServer(connString);
+
+
             });
         }
 
